@@ -72,32 +72,63 @@
   <ul id="taskList"></ul>
 
   <script>
-    const taskInput = document.getElementById("taskInput");
-    const taskList = document.getElementById("taskList");
+  const taskInput = document.getElementById("taskInput");
+  const taskList = document.getElementById("taskList");
+  const API_URL = "http://localhost:5000/tasks"; // backend endpoint
 
-    function addTask() {
-      const taskText = taskInput.value.trim();
-      if (taskText === "") return;
+  // Fetch tasks from backend
+  async function fetchTasks() {
+    const res = await fetch(API_URL);
+    const tasks = await res.json();
+    renderTasks(tasks);
+  }
 
+  // Render tasks into the list
+  function renderTasks(tasks) {
+    taskList.innerHTML = "";
+    tasks.forEach(task => {
       const li = document.createElement("li");
+      if (task.done) li.classList.add("done");
 
       const span = document.createElement("span");
-      span.textContent = taskText;
-      span.onclick = () => {
-        li.classList.toggle("done");
+      span.textContent = task.text;
+      span.onclick = async () => {
+        await fetch(`${API_URL}/${task.id}`, { method: "PUT" });
+        fetchTasks();
       };
 
       const delBtn = document.createElement("button");
       delBtn.textContent = "❌";
       delBtn.className = "delete-btn";
-      delBtn.onclick = () => li.remove();
+      delBtn.onclick = async () => {
+        await fetch(`${API_URL}/${task.id}`, { method: "DELETE" });
+        fetchTasks();
+      };
 
       li.appendChild(span);
       li.appendChild(delBtn);
       taskList.appendChild(li);
+    });
+  }
 
-      taskInput.value = "";
-    }
-  </script>
+  // Add a new task
+  async function addTask() {
+    const taskText = taskInput.value.trim();
+    if (!taskText) return;
+
+    await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: taskText })
+    });
+
+    taskInput.value = "";
+    fetchTasks();
+  }
+
+  // Load tasks on page load
+  fetchTasks();
+</script>
+
 </body>
 </html>
