@@ -5,14 +5,10 @@ const app = express();
 const PORT = 5000;
 app.use(cors());
 app.use(express.json());
-
-
 let tasks = [];
-
 app.get("/tasks", (req, res) => {
   res.json(tasks);
 });
-
 app.post("/tasks", (req, res) => {
   const { text } = req.body;
   if (!text) return res.status(400).json({ error: "Task text is required" });
@@ -21,7 +17,6 @@ app.post("/tasks", (req, res) => {
   tasks.push(newTask);
   res.status(201).json(newTask);
 });
-
 app.put("/tasks/:id", (req, res) => {
   const { id } = req.params;
   const task = tasks.find(t => t.id == id);
@@ -30,7 +25,6 @@ app.put("/tasks/:id", (req, res) => {
   task.done = !task.done;
   res.json(task);
 });
-
 app.delete("/tasks/:id", (req, res) => {
   const { id } = req.params;
   tasks = tasks.filter(t => t.id != id);
