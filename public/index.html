@@ -14,7 +14,6 @@
     h1 {
       color: #333;
     }
-    
     .input-section {
       margin-bottom: 20px;
     }
@@ -64,6 +63,7 @@
 </head>
 <body>
   <h1>To-Do List ✅</h1>
+
   <div class="input-section">
     <input type="text" id="taskInput" placeholder="Enter a task...">
     <button onclick="addTask()">Add</button>
@@ -72,59 +72,32 @@
   <ul id="taskList"></ul>
 
   <script>
-  const taskInput = document.getElementById("taskInput");
-  const taskList = document.getElementById("taskList");
-  const API_URL = "http://localhost:5000/tasks";
+    const taskInput = document.getElementById("taskInput");
+    const taskList = document.getElementById("taskList");
 
-  async function fetchTasks() {
-    const res = await fetch(API_URL);
-    const tasks = await res.json();
-    renderTasks(tasks);
-  }
+    function addTask() {
+      const taskText = taskInput.value.trim();
+      if (taskText === "") return;
 
-  function renderTasks(tasks) {
-    taskList.innerHTML = "";
-    tasks.forEach(task => {
       const li = document.createElement("li");
-      if (task.done) li.classList.add("done");
 
       const span = document.createElement("span");
-      span.textContent = task.text;
-      span.onclick = async () => {
-        await fetch(`${API_URL}/${task.id}`, { method: "PUT" });
-        fetchTasks();
+      span.textContent = taskText;
+      span.onclick = () => {
+        li.classList.toggle("done");
       };
 
       const delBtn = document.createElement("button");
       delBtn.textContent = "❌";
       delBtn.className = "delete-btn";
-      delBtn.onclick = async () => {
-        await fetch(`${API_URL}/${task.id}`, { method: "DELETE" });
-        fetchTasks();
-      };
+      delBtn.onclick = () => li.remove();
 
       li.appendChild(span);
       li.appendChild(delBtn);
       taskList.appendChild(li);
-    });
-  }
 
-  async function addTask() {
-    const taskText = taskInput.value.trim();
-    if (!taskText) return;
-
-    await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: taskText })
-    });
-
-    taskInput.value = "";
-    fetchTasks();
-  }
-
-  fetchTasks();
-</script>
-
+      taskInput.value = "";
+    }
+  </script>
 </body>
 </html>
