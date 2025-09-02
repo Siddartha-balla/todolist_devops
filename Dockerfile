@@ -1,17 +1,24 @@
-FROM node:20
-
-# Set working directory
+# Stage 1: Build React app
+FROM node:20 AS build
 WORKDIR /app
 
-# Copy package.json and install dependencies
+# Install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy all source files
+# Copy app files and build
 COPY . .
+RUN npm run build
 
-# Expose the development server port
-EXPOSE 3000
+# Stage 2: Serve with Nginx
+FROM nginx:alpine
+WORKDIR /usr/share/nginx/html
 
-# Run the React app
-CMD ["npm", "start"]
+# Copy the production build
+COPY --from=build /app/build .
+
+# Expose port 80
+EXPOSE 80
+
+# Run nginx
+CMD ["nginx", "-g", "daemon off;"]
