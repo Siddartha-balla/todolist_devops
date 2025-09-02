@@ -298,6 +298,26 @@
       taskTime.min = local;
     }
     setMinDateTime();
+    function checkMissedTasks() {
+      const now = new Date();
+      document.querySelectorAll("#taskList li").forEach(li => {
+        if (!li.classList.contains("done") && !li.classList.contains("missed")) {
+          const timeText = li.querySelector(".task-time").textContent.replace("📅 ", "");
+          const taskTime = new Date(timeText);
+          if (taskTime < now) {
+            li.classList.add("missed");
+            const missedLabel = document.createElement("div");
+            missedLabel.className = "missed-label";
+            missedLabel.textContent = "⏰ Missed Task";
+            li.appendChild(missedLabel);
+            saveTasks();
+          }
+        }
+      });
+    }
+
+    setInterval(checkMissedTasks, 60000); // check every minute
+    loadTasks();
   </script>
 </body>
 
