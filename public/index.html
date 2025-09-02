@@ -1,86 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>To-Do List</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(-45deg, #89f7fe, #66a6ff, #ffdde1, #ee9ca7);
-      background-size: 400% 400%;
-      animation: gradientShift 12s ease infinite;
-    }
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    h1 {
-      color:red;
-    }
-    .input-section {
-      margin-bottom: 20px;
-    }
-    input {
-      padding: 10px;
-      font-size: 16px;
-      width: 250px;
-    }
-    button {
-      padding: 10px 15px;
-      margin-left: 5px;
-      cursor: pointer;
-      border: none;
-      background: #4CAF50;
-      color: red;
-      border-radius: 5px;
-    }
-    button:hover {
-      background: #45a049;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    li {
-      margin: 8px 0;
-      font-size: 18px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-    }
-    li span {
-      cursor: pointer;
-    }
-    li.done span {
-      text-decoration: line-through;
-      color: gray;
-    }
-    .delete-btn {
-      background: red;
-    }
-    .delete-btn:hover {
-      background: darkred;
-    }
-  </style>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List</title>
+    <style>
+  body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(-45deg, #89f7fe, #66a6ff, #ffdde1, #ee9ca7);
+    background-size: 400% 400%;
+    animation: gradientShift 12s ease infinite;
+  }
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .todo-container {
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
+    border-radius: 18px;
+    padding: 40px 32px 32px 32px;
+    min-width: 350px;
+    max-width: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    backdrop-filter: blur(2px);
+  }
+  h1 {
+    font-size: 2.2rem;
+    margin-bottom: 18px;
+    color: #2c3e50;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px #e0e0e0;
+  }
+  .input-section {
+    margin-bottom: 24px;
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  input[type="text"] {
+    flex: 1;
+    padding: 12px 14px;
+    font-size: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    outline: none;
+    transition: border 0.3s, box-shadow 0.3s;
+    background: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(102,166,255,0.06);
+  }
+  input[type="text"]:focus {
+    border-color: #66a6ff;
+    box-shadow: 0 2px 12px rgba(102,166,255,0.15);
+    background: #fff;
+  }
+  button {
+    padding: 12px 20px;
+    margin-left: 0;
+    cursor: pointer;
+    border: none;
+    background: linear-gradient(90deg, #66a6ff 60%, #89f7fe 100%);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(102,166,255,0.10);
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+  }
+  button:hover {
+    background: linear-gradient(90deg, #4a8fe0 60%, #66a6ff 100%);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 16px rgba(102,166,255,0.18);
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-height: 260px;
+    overflow-y: auto;
+  }
+  li {
+    margin: 10px 0;
+    font-size: 1.08rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: #f5f8ff;
+    border-radius: 7px;
+    padding: 10px 16px;
+    box-shadow: 0 1px 4px rgba(102,166,255,0.07);
+    transition: background 0.2s;
+  }
+  li:hover {
+    background: #eaf3ff;
+  }
+  li span {
+    cursor: pointer;
+    flex: 1;
+    transition: color 0.2s;
+  }
+  li.done span {
+    text-decoration: line-through;
+    color: #b0b0b0;
+    opacity: 0.7;
+  }
+  .delete-btn {
+    background: linear-gradient(90deg, #ff5858 60%, #ffb199 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 13px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    box-shadow: 0 1px 4px rgba(255,88,88,0.08);
+  }
+  .delete-btn:hover {
+    background: linear-gradient(90deg, #d7263d 60%, #ff5858 100%);
+    transform: scale(1.08);
+  }
+  /* Custom scrollbar for task list */
+  ul::-webkit-scrollbar {
+    width: 8px;
+    background: #e0e0e0;
+    border-radius: 6px;
+  }
+  ul::-webkit-scrollbar-thumb {
+    background: #b3d1ff;
+    border-radius: 6px;
+  }
+</style>
+  </head>
+
 <body>
-  <h1>To-Do List ✅</h1>
-
-  <div class="input-section">
-    <input type="text" id="taskInput" placeholder="Enter a task...">
-    <button onclick="addTask()">Add</button>
+  <div class="todo-container">
+    <h1>To-Do List ✅</h1>
+    <div class="input-section">
+      <input type="text" id="taskInput" placeholder="Enter a task..." />
+      <button onclick="addTask()">Add</button>
+    </div>
+    <ul id="taskList"></ul>
   </div>
-
-  <ul id="taskList"></ul>
-
   <script>
     const taskInput = document.getElementById("taskInput");
     const taskList = document.getElementById("taskList");
@@ -110,4 +183,5 @@
     }
   </script>
 </body>
+
 </html>
