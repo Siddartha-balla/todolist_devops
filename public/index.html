@@ -262,6 +262,42 @@
       li.appendChild(delBtn);
       taskList.appendChild(li);
     }
+    function saveTasks() {
+      const tasks = [];
+      document.querySelectorAll("#taskList li").forEach(li => {
+        tasks.push({
+          text: li.querySelector(".task-text").textContent.replace("📝 ", ""),
+          time: li.querySelector(".task-time").textContent.replace("📅 ", ""),
+          done: li.classList.contains("done"),
+          missed: li.classList.contains("missed")
+        });
+      });
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function loadTasks() {
+      const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      taskList.innerHTML = "";
+      tasks.forEach(task => {
+        createTaskElement(task);
+      });
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const all = document.querySelectorAll("#taskList li").length;
+      const done = document.querySelectorAll("#taskList li.done").length;
+      const percent = all === 0 ? 0 : (done / all) * 100;
+      progressBar.style.width = percent + "%";
+    }
+     function setMinDateTime() {
+      const now = new Date();
+      const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+        .toISOString()
+        .slice(0, 16);
+      taskTime.min = local;
+    }
+    setMinDateTime();
   </script>
 </body>
 
