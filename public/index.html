@@ -6,10 +6,20 @@
   <title>To-Do List</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 40px;
-      background: #f4f4f9;
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(-45deg, #89f7fe, #66a6ff, #ffdde1, #ee9ca7);
+      background-size: 400% 400%;
+      animation: gradientShift 12s ease infinite;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
     h1 {
       color:red;
