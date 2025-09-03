@@ -1,0 +1,17 @@
+STEPS OF CONTINUOUS INTEGRATION SUCH THAT WHEN IN GIT ANY CHANGES OCCURS
+JENKINS SHOULD AUTOMATICALLY SHOULD TRIGGER AND BUILD THAT IT SHOULD PUSH THE IMAGE TO THGE DOCKER HUB
+
+-> CONVERSION OF JENKIN'S LOCALHOST URL TO PUBLIC USING NGROK
+    Command to run in ngrok 
+      ngrok http localhost:(port number)
+-> Apply the url given by ngrok in webhook payload url of github
+-> Make a new freestyle project
+-> Select git checkbox 
+  Give the git repository link in the Repository URL
+-> In triggers select GitHub hook trigger for GITScm polling
+-> In Execute Windows batch command
+  cd (location where docker file is present)
+  docker build -t (imagename) .
+  docker login -u (docker hub username) -p (docker hub password )
+  docker tag todolist (docker hub username)/(repository of dockerhub):%BUILD_NUMBER%
+  docker push (docker hub username)/(repository of dockerhub):%BUILD_NUMBER%
