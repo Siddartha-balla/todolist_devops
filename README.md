@@ -21,7 +21,7 @@ Managing daily tasks can often feel overwhelming, and using paper notes or messy
 The To-Do List Application solves this problem by providing a clean, simple, and professional way to organize tasks with due dates, deadlines, and progress tracking.
 Instead of remembering tasks in your head, you can add them with deadlines
 
-🚀 Features
+# 🚀 Features
 
 Add, and delete tasks easily
 
@@ -44,3 +44,23 @@ Students managing study schedules
 Professionals tracking project deadlines
 
 Individuals building productivity habits
+
+# Running with Docker
+
+This project includes a Dockerfile for containerized deployment.
+
+🔹 For Other Developers (Pull & Run Image)
+# 1. Login to Docker Hub
+docker login  
+
+# 2. Pull the image
+docker pull <your-dockerhub-username>/todolist:latest  
+
+# 3. Run the container
+docker run -p 3000:3000 <your-dockerhub-username>/todolist:latest  
+
+# 4. Check running containers
+docker ps  
+
+# 5. View logs (optional)
+docker logs -f todolist-container
