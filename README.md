@@ -34,3 +34,13 @@ Tracks missed tasks automatically
 Visual progress bar for completed tasks
 
 Modern, animated UI with gradient background
+
+The To-Do List Application is a simple yet powerful productivity tool that makes daily planning more effective, professional, and user-friendly.
+
+It is especially useful for:
+
+Students managing study schedules
+
+Professionals tracking project deadlines
+
+Individuals building productivity habits
