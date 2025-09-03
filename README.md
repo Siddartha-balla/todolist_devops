@@ -143,9 +143,13 @@ Each Jenkins build creates a unique versioned image (todolist:<build_number>).
 Eliminates manual deployment errors.
 
 Provides scalability & reliability using Kubernetes.
+
 docker hub link 
+
 https://hub.docker.com/repository/docker/preetham1703/todolist/tags
+
 Deployment using GKE
+
 link-http://34.143.239.201/
 
 
