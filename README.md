@@ -64,3 +64,43 @@ docker ps
 
 # 5. View logs (optional)
 docker logs -f todolist-container
+
+# **Jenkins + GKE Deployment Workflow**
+
+We automated the deployment of the To-Do List Application using Jenkins CI/CD integrated with Google Kubernetes Engine (GKE).
+
+⚙ Jenkins Pipeline (Batch Script for Windows Node)
+REM ====== Configuration ======
+set REPO_URL=https://github.com/Siddartha-balla/todolist_devops.git
+set BUILD_NUMBER=%BUILD_NUMBER%
+set DOCKER_USER=preetham1703
+set DOCKER_PASS=S@i170305
+set IMAGE_NAME=todolist
+set GCP_PROJECT=cbd-a-6719
+set CLUSTER_NAME=cluster-1
+set CLUSTER_REGION=asia-southeast1
+set SERVICE_ACCOUNT_KEY=C:\Users\Preet\Downloads\cbd-a-6719-2ca17da47a1b.json
+
+REM ====== Step 1: Clone latest code ======
+cd C:\
+if exist todolist rmdir /s /q todolist
+git clone %REPO_URL% todolist
+cd todolist
+
+REM ====== Step 2: Build Docker image ======
+docker build -t %DOCKER_USER%/%IMAGE_NAME%:%BUILD_NUMBER% .
+
+REM ====== Step 3: Push to Docker Hub ======
+echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
+docker push %DOCKER_USER%/%IMAGE_NAME%:%BUILD_NUMBER%
+
+REM ====== Step 4: Setup GCP & GKE credentials ======
+set PATH=C:\Users\Preet\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin;%PATH%
+set USE_GKE_GCLOUD_AUTH_PLUGIN=True
+call gcloud auth activate-service-account --key-file="%SERVICE_ACCOUNT_KEY%"
+call gcloud container clusters get-credentials %CLUSTER_NAME% --region %CLUSTER_REGION% --project %GCP_PROJECT%
+
+REM ====== Step 5: Update Kubernetes Deployment ======
+echo "Tag to be used: %DOCKER_USER%/%IMAGE_NAME%:%BUILD_NUMBER%"
+call kubectl set image deployment/deployment-1 %IMAGE_NAME%-1=docker.io/%DOCKER_USER%/%IMAGE_NAME%:%BUILD_NUMBER%
+
