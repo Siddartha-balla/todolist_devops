@@ -50,19 +50,19 @@ Individuals building productivity habits
 This project includes a Dockerfile for containerized deployment.
 
 🔹 For Other Developers (Pull & Run Image)
-# 1. Login to Docker Hub
+**1. Login to Docker Hub**
 docker login  
 
-# 2. Pull the image
+**2. Pull the image**
 docker pull <your-dockerhub-username>/todolist:latest  
 
-# 3. Run the container
+**3. Run the container**
 docker run -p 3000:3000 <your-dockerhub-username>/todolist:latest  
 
-# 4. Check running containers
+**4. Check running containers**
 docker ps  
 
-# 5. View logs (optional)
+**5. View logs (optional)**
 docker logs -f todolist-container
 
 # **Jenkins + GKE Deployment Workflow**
