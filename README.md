@@ -104,3 +104,34 @@ REM ====== Step 5: Update Kubernetes Deployment ======
 echo "Tag to be used: %DOCKER_USER%/%IMAGE_NAME%:%BUILD_NUMBER%"
 call kubectl set image deployment/deployment-1 %IMAGE_NAME%-1=docker.io/%DOCKER_USER%/%IMAGE_NAME%:%BUILD_NUMBER%
 
+# 📌 Steps Explained
+
+Clone Latest Code
+
+Pulls the most recent commit from GitHub repository.
+
+Ensures Jenkins always builds from the latest source.
+
+Build Docker Image
+
+Builds a new Docker image with a unique Jenkins build tag (%BUILD_NUMBER%).
+
+Push to Docker Hub
+
+Authenticates with Docker Hub using Jenkins credentials.
+
+Pushes the image to Docker Hub for external availability.
+
+Authenticate with GCP & GKE
+
+Uses a service account JSON key for secure authentication.
+
+Fetches credentials for the GKE cluster (cluster-1 in asia-southeast1).
+
+Update Kubernetes Deployment
+
+Updates the container image in the Kubernetes deployment.
+
+Ensures the GKE pods are refreshed with the latest build.
+
+
