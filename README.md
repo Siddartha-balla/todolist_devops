@@ -134,4 +134,14 @@ Updates the container image in the Kubernetes deployment.
 
 Ensures the GKE pods are refreshed with the latest build.
 
+# ✅ Advantages of this Setup
+
+Fully automated CI/CD pipeline from GitHub → Jenkins → Docker Hub → GKE.
+
+Each Jenkins build creates a unique versioned image (todolist:<build_number>).
+
+Eliminates manual deployment errors.
+
+Provides scalability & reliability using Kubernetes.
+
 
