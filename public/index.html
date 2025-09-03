@@ -36,7 +36,7 @@
       margin-bottom: 15px;
     }
 
-  .todo-container {
+/*   .todo-container {
     background: rgba(255,255,255,0.95);
     box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
     border-radius: 18px;
@@ -48,7 +48,7 @@
     flex-direction: column;
     align-items: center;
     backdrop-filter: blur(2px);
-  }
+  } */
        h1 {
       font-size: 28px;
       margin-bottom: 5px;
@@ -85,15 +85,17 @@
  .input-row {
       display: flex;
       gap: 10px;
+   justify-content: center;
+      flex-wrap: wrap;
     }
-    input, button {
+    input, button,select {
       padding: 12px;
       font-size: 15px;
       border-radius: 10px;
       border: 2px solid #e0e0e0;
       outline: none;
     }
-    input:focus {
+    input:focus ,select:focus{
       border-color: #66a6ff;
       box-shadow: 0 0 6px rgba(102, 166, 255, 0.3);
     }
@@ -122,13 +124,12 @@
       margin-bottom: 12px;
       border-radius: 12px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+    flex-direction: column;
+      align-items: flex-start;
       font-size: 15px;
       color: #2c3e50;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
-      flex-direction: column;
-      align-items: flex-start;
+    
     }
     li span.task-text {
       cursor: pointer;
@@ -171,6 +172,24 @@
       background: #e63946;
       transform: scale(1.1);
     }
+      .time-selectors {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .time-selectors select {
+      width: 70px;
+      height: auto;
+      overflow-y: scroll;
+      cursor: pointer;
+    }
+
+    .error-message {
+      color: #e63946;
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.9); }
@@ -192,34 +211,62 @@
         <input type="text" id="taskInput" placeholder="Enter a task...">
       </div>
      <div class="input-row">
-        <input type="datetime-local" id="taskTime">
+        <input type="datetime-local" id="taskDate">
+       <div class="time-selectors">
+          <select id="hourSelect" size="6"></select> :
+          <select id="minuteSelect" size="6"></select>
+        </div>
         <button onclick="addTask()">Add</button>
       </div>
+      <p id="errorMessage" class="error-message">⛔ Task date & time cannot be in the past!</p>
     </div>
     <ul id="taskList"></ul>
   </div>
   <script>
     const taskInput = document.getElementById("taskInput");
-    const taskTime = document.getElementById("taskTime");
+    const taskDate = document.getElementById("taskDate");
+    const hourSelect = document.getElementById("hourSelect");
+    const minuteSelect = document.getElementById("minuteSelect");
     const taskList = document.getElementById("taskList");
     const progressBar = document.getElementById("progressBar");
+    const errorMessage = document.getElementById("errorMessage");
+    for (let h = 0; h < 24; h++) {
+      const opt = document.createElement("option");
+      opt.value = h.toString().padStart(2, "0");
+      opt.textContent = opt.value;
+      hourSelect.appendChild(opt);
+    }
+    for (let m = 0; m < 60; m++) {
+      const opt = document.createElement("option");
+      opt.value = m.toString().padStart(2, "0");
+      opt.textContent = opt.value;
+      minuteSelect.appendChild(opt);
+    }
 
-  function addTask() {
+     function addTask() {
       const taskText = taskInput.value.trim();
-      const taskDate = taskTime.value;
+      const dateVal = taskDate.value;
+      const hourVal = hourSelect.value;
+      const minuteVal = minuteSelect.value;
 
-      if (taskText === "" || taskDate === "") return;
+      if (!taskText || !dateVal || hourVal === "" || minuteVal === "") return;
 
-      const selectedDate = new Date(taskDate);
-      if (selectedDate < new Date()) {
-        alert("⛔ Task date & time cannot be in the past!");
+      const taskDateTime = new Date(dateVal + "T" + hourVal + ":" + minuteVal + ":00");
+
+      // ✅ Check if full datetime is in the past
+      if (taskDateTime < new Date()) {
+        errorMessage.style.display = "block"; // show error
         return;
+      } else {
+        errorMessage.style.display = "none"; // hide error
       }
 
-      createTaskElement({ text: taskText, time: taskDate, done: false, missed: false });
+      createTaskElement({ text: taskText, time: taskDateTime, done: false, missed: false });
 
       taskInput.value = "";
       taskTime.value = "";
+    hourSelect.selectedIndex = 0;
+      minuteSelect.selectedIndex = 0;
       saveTasks();
       updateProgress();
     }
@@ -291,12 +338,15 @@
       const percent = all === 0 ? 0 : (done / all) * 100;
       progressBar.style.width = percent + "%";
     }
-     function setMinDateTime() {
+     function setMinMaxDate() {
       const now = new Date();
-      const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
-        .toISOString()
-        .slice(0, 16);
-      taskTime.min = local;
+      const today = now.toISOString().split("T")[0];
+      taskDate.min = today;
+
+      const future = new Date();
+      future.setFullYear(future.getFullYear() + 10);
+      const maxDate = future.toISOString().split("T")[0];
+      taskDate.max = maxDate;
     }
     setMinDateTime();
     function checkMissedTasks() {
