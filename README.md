@@ -150,8 +150,8 @@ docker hub link
 
 https://hub.docker.com/repository/docker/preetham1703/todolist/tags
 
-Deployment using GKE
+website link
 
-link-http://34.143.239.201/
+https://todolist-1-w4nk.onrender.com/
 
 
