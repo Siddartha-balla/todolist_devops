@@ -146,12 +146,15 @@ Eliminates manual deployment errors.
 
 Provides scalability & reliability using Kubernetes.
 
-docker hub link 
+**docker hub link **
 
 https://hub.docker.com/repository/docker/preetham1703/todolist/tags
 
-website link
+**website link**
 
 https://todolist-1-w4nk.onrender.com/
+
+**GCP LINK**
+http://34.87.226.231:5000/
 
 
